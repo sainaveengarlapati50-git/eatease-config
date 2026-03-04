@@ -44,37 +44,53 @@ spring:
           predicates:
             - Path=/api/search/**
 
-        # Swagger routes
+        # USER
         - id: user-swagger
           uri: lb://user-service
           predicates:
             - Path=/user-service/v3/api-docs
-
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        
+        # RESTAURANT
         - id: restaurant-swagger
           uri: lb://restaurant-service
           predicates:
             - Path=/restaurant-service/v3/api-docs
-
+          filters:
+            - RewritePath=/restaurant-service/(?<segment>.*), /$\{segment}
+        
+        # ORDER
         - id: order-swagger
           uri: lb://order-service
           predicates:
             - Path=/order-service/v3/api-docs
-
+          filters:
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+        
+        # PAYMENT
         - id: payment-swagger
           uri: lb://payment-service
           predicates:
             - Path=/payment-service/v3/api-docs
-
+          filters:
+            - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
+        
+        # ADMIN
         - id: admin-swagger
           uri: lb://admin-service
           predicates:
             - Path=/admin-service/v3/api-docs
-
+          filters:
+            - RewritePath=/admin-service/(?<segment>.*), /$\{segment}
+        
+        # SEARCH
         - id: search-swagger
           uri: lb://search-service
           predicates:
             - Path=/search-service/v3/api-docs
-
+          filters:
+            - RewritePath=/search-service/(?<segment>.*), /$\{segment}
 app:
   jwt:
     secret: ${JWT_SECRET:EatEaseFoodDeliveryPlatformSecretKeyForJWTTokenGeneration2024}
