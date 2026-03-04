@@ -13,6 +13,23 @@ spring:
           enabled: true
           lower-case-service-id: true
 
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:8085
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
       routes:
         - id: user-service
           uri: lb://user-service
@@ -44,53 +61,54 @@ spring:
           predicates:
             - Path=/api/search/**
 
-        # USER
+        # USER SWAGGER
         - id: user-swagger
           uri: lb://user-service
           predicates:
             - Path=/user-service/v3/api-docs
           filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        
-        # RESTAURANT
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
+
+        # RESTAURANT SWAGGER
         - id: restaurant-swagger
           uri: lb://restaurant-service
           predicates:
             - Path=/restaurant-service/v3/api-docs
           filters:
-            - RewritePath=/restaurant-service/(?<segment>.*), /$\{segment}
-        
-        # ORDER
+            - RewritePath=/restaurant-service/(?<segment>.*), /${segment}
+
+        # ORDER SWAGGER
         - id: order-swagger
           uri: lb://order-service
           predicates:
             - Path=/order-service/v3/api-docs
           filters:
-            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
-        
-        # PAYMENT
+            - RewritePath=/order-service/(?<segment>.*), /${segment}
+
+        # PAYMENT SWAGGER
         - id: payment-swagger
           uri: lb://payment-service
           predicates:
             - Path=/payment-service/v3/api-docs
           filters:
-            - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
-        
-        # ADMIN
+            - RewritePath=/payment-service/(?<segment>.*), /${segment}
+
+        # ADMIN SWAGGER
         - id: admin-swagger
           uri: lb://admin-service
           predicates:
             - Path=/admin-service/v3/api-docs
           filters:
-            - RewritePath=/admin-service/(?<segment>.*), /$\{segment}
-        
-        # SEARCH
+            - RewritePath=/admin-service/(?<segment>.*), /${segment}
+
+        # SEARCH SWAGGER
         - id: search-swagger
           uri: lb://search-service
           predicates:
             - Path=/search-service/v3/api-docs
           filters:
-            - RewritePath=/search-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/search-service/(?<segment>.*), /${segment}
+
 app:
   jwt:
     secret: ${JWT_SECRET:EatEaseFoodDeliveryPlatformSecretKeyForJWTTokenGeneration2024}
@@ -100,11 +118,10 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka
 
   instance:
     prefer-ip-address: true
-
 
 springdoc:
   swagger-ui:
